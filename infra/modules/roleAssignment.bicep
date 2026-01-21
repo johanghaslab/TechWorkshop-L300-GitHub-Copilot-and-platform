@@ -1,5 +1,6 @@
 param principalId string
 param scopeResourceId string
+param principalType string = 'ServicePrincipal'
 
 // AcrPull built-in role definition ID
 var acrPullRoleDefinitionId = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
@@ -14,6 +15,6 @@ resource assignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   properties: {
     principalId: principalId
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', acrPullRoleDefinitionId)
-    principalType: 'ServicePrincipal'
+    principalType: principalType
   }
 }
