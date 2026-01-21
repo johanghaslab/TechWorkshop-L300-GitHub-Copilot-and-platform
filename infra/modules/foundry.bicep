@@ -1,4 +1,7 @@
 param name string
+@allowed([
+  'swedencentral'
+])
 param location string
 
 resource foundry 'Microsoft.CognitiveServices/accounts@2023-05-01' = {

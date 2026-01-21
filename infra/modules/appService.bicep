@@ -6,7 +6,16 @@ param acrLoginServer string
 param containerImage string
 param appInsightsConnectionString string
 
-var skuTier = startsWith(toLower(sku), 'b') ? 'Basic' : 'Standard'
+var skuNormalized = toLower(sku)
+var skuTier = contains(skuNormalized, 'v3')
+  ? 'PremiumV3'
+  : contains(skuNormalized, 'v2')
+    ? 'PremiumV2'
+    : startsWith(skuNormalized, 'p')
+      ? 'Premium'
+      : startsWith(skuNormalized, 's')
+        ? 'Standard'
+        : 'Basic'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName

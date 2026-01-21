@@ -1,5 +1,6 @@
 param name string
 param location string
+param retentionInDays int = 30
 
 resource workspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   name: name
@@ -8,7 +9,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
     sku: {
       name: 'PerGB2018'
     }
-    retentionInDays: 30
+    retentionInDays: retentionInDays
   }
 }
 
