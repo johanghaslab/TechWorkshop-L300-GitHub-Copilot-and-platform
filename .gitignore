@@ -135,6 +135,7 @@ coverage-html/
 
 # Generated files
 appsettings.*.json
+infra/main.json
 
 # Misc
 Thumbs.db
