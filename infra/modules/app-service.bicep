@@ -44,6 +44,10 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appInsightsKey
         }
+        {
+          name: 'WEBSITES_PORT'
+          value: '8080'
+        }
       ]
     }
   }
