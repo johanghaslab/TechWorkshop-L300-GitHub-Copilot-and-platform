@@ -48,6 +48,7 @@ module appService 'modules/app-service.bicep' = {
     imageTag: 'latest'
     appInsightsKey: monitoring.outputs.appInsightsKey
   }
+  dependsOn: [acr]
 }
 
 // Storage Account for AI Foundry
