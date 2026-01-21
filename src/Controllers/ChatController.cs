@@ -84,7 +84,15 @@ namespace ZavaStorefront.Controllers
                 }
                 if (response.ContentStream.CanSeek)
                 {
-                    response.ContentStream.Position = 0;
+                    try
+                    {
+                        response.ContentStream.Position = 0;
+                    }
+                    catch (IOException ex)
+                    {
+                        _logger.LogWarning(ex, "Content safety response stream could not be reset.");
+                        return (false, WarningMessage);
+                    }
                 }
                 using var document = JsonDocument.Parse(response.ContentStream);
                 if (!document.RootElement.TryGetProperty("categoriesAnalysis", out var categoriesAnalysis))
