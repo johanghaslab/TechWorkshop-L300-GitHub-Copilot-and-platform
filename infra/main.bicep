@@ -79,5 +79,7 @@ module aiFoundry 'modules/ai-foundry.bicep' = {
     env: env
     storageAccountId: storage.outputs.storageAccountId
     keyVaultId: keyVault.outputs.keyVaultId
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsId
+    managedIdentityPrincipalId: identity.outputs.principalId
   }
 }

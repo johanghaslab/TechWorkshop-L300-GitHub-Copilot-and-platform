@@ -1,41 +1,41 @@
 using Microsoft.AspNetCore.Mvc;
-using ZavaStorefront.Services;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using System.Text;
 
-namespace ZavaStorefront.Controllers;
-
-public class ChatController : Controller
+namespace ZavaStorefront.Controllers
 {
-    private readonly ILogger<ChatController> _logger;
-    private readonly ChatService _chatService;
-
-    public ChatController(ILogger<ChatController> logger, ChatService chatService)
+    public class ChatController : Controller
     {
-        _logger = logger;
-        _chatService = chatService;
-    }
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-    public IActionResult Index()
-    {
-        _logger.LogInformation("Loading chat page");
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> SendMessage([FromBody] ChatRequest request)
-    {
-        if (string.IsNullOrWhiteSpace(request.Message))
+        public ChatController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            return BadRequest(new { error = "Message cannot be empty" });
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
-        _logger.LogInformation("Sending message to Phi4: {Message}", request.Message);
-        var response = await _chatService.SendMessageAsync(request.Message);
-        
-        return Json(new { response });
-    }
-}
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
 
-public class ChatRequest
-{
-    public string Message { get; set; } = string.Empty;
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string userMessage)
+        {
+            // TODO: Replace with actual Foundry Phi4 endpoint URL
+            var endpoint = _configuration["Foundry:Phi4Endpoint"] ?? "https://your-phi4-endpoint-url";
+            var client = _httpClientFactory.CreateClient();
+            var requestBody = new { input = userMessage };
+            var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(endpoint, content);
+            var responseString = await response.Content.ReadAsStringAsync();
+            // Optionally parse responseString if needed
+            return Json(new { response = responseString });
+        }
+    }
 }

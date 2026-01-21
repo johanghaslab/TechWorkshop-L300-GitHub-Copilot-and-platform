@@ -1,110 +1,32 @@
 @{
-    ViewData["Title"] = "Chat with AI";
+    ViewData["Title"] = "Chat";
 }
 
-<div class="container mt-4">
-    <h1 class="mb-4">Chat with Microsoft Foundry Phi4</h1>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">AI Chat Assistant</h5>
-                </div>
-                <div class="card-body">
-                    <div id="chatArea" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
-                        <div class="text-muted text-center">Start a conversation by typing a message below...</div>
-                    </div>
-
-                    <div class="input-group">
-                        <input type="text" id="messageInput" class="form-control" placeholder="Type your message here..." aria-label="Chat message input" />
-                        <button id="sendButton" class="btn btn-primary" type="button" aria-label="Send message">
-                            <i class="bi bi-send" aria-hidden="true"></i> Send
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<h2>Chat with Phi4</h2>
+<div>
+    <textarea id="chatArea" rows="10" cols="80" readonly style="width:100%;"></textarea>
+</div>
+<div style="margin-top:10px;">
+    <input type="text" id="userMessage" style="width:80%;" placeholder="Type your message..." />
+    <button id="sendBtn">Send</button>
 </div>
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            const chatArea = $('#chatArea');
-            const messageInput = $('#messageInput');
-            const sendButton = $('#sendButton');
-
-            function appendMessage(role, content) {
-                const messageClass = role === 'user' ? 'bg-primary text-white' : 'bg-light';
-                const alignment = role === 'user' ? 'text-end' : 'text-start';
-                const messageHtml = `
-                    <div class="${alignment} mb-2">
-                        <div class="d-inline-block ${messageClass} rounded p-2" style="max-width: 80%;">
-                            <strong>${role === 'user' ? 'You' : 'AI'}:</strong> ${escapeHtml(content)}
-                        </div>
-                    </div>
-                `;
-                chatArea.append(messageHtml);
-                chatArea.scrollTop(chatArea[0].scrollHeight);
-            }
-
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            function sendMessage() {
-                const message = messageInput.val().trim();
-                if (!message) return;
-
-                // Disable input while processing
-                messageInput.prop('disabled', true);
-                sendButton.prop('disabled', true);
-
-                // Clear initial message if present
-                if (chatArea.find('.text-muted').length > 0) {
-                    chatArea.empty();
-                }
-
-                // Display user message
-                appendMessage('user', message);
-                messageInput.val('');
-
-                // Send to server
-                $.ajax({
-                    url: '@Url.Action("SendMessage", "Chat")',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ message: message }),
-                    success: function(data) {
-                        appendMessage('assistant', data.response);
-                    },
-                    error: function(xhr, status, error) {
-                        appendMessage('assistant', 'Error: Unable to get response from the AI service.');
-                        console.error('Error:', error);
-                    },
-                    complete: function() {
-                        messageInput.prop('disabled', false);
-                        sendButton.prop('disabled', false);
-                        messageInput.focus();
-                    }
-                });
-            }
-
-            // Send message on button click
-            sendButton.click(sendMessage);
-
-            // Send message on Enter key press
-            messageInput.keypress(function(e) {
-                if (e.which === 13) {
-                    sendMessage();
-                }
+        document.getElementById('sendBtn').onclick = async function() {
+            const userMessage = document.getElementById('userMessage').value;
+            if (!userMessage) return;
+            const chatArea = document.getElementById('chatArea');
+            chatArea.value += '\nYou: ' + userMessage;
+            document.getElementById('userMessage').value = '';
+            const response = await fetch('/Chat/SendMessage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage })
             });
-
-            // Focus on input field
-            messageInput.focus();
-        });
+            const data = await response.json();
+            chatArea.value += '\nPhi4: ' + data.response;
+            chatArea.scrollTop = chatArea.scrollHeight;
+        };
     </script>
 }
