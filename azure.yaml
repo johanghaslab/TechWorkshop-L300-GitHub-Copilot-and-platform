@@ -1,0 +1,3 @@
+name: zava-storefront
+infra:
+  path: infra
