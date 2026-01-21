@@ -1,0 +1,63 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "## AI Services Observability\n\nThis workbook provides insights into AI service performance and usage patterns."
+      },
+      "name": "text - 0"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "requests\n| where timestamp >= ago(1h)\n| summarize RequestCount = count() by bin(timestamp, 5m)\n| render timechart",
+        "size": 0,
+        "title": "Request Volume (Last Hour)",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "timechart"
+      },
+      "name": "query - Request Volume"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "requests\n| where timestamp >= ago(1h)\n| summarize \n    P50 = percentile(duration, 50),\n    P90 = percentile(duration, 90),\n    P95 = percentile(duration, 95),\n    P99 = percentile(duration, 99)\n    by bin(timestamp, 5m)\n| render timechart",
+        "size": 0,
+        "title": "Latency Percentiles (ms)",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "timechart"
+      },
+      "name": "query - Latency Percentiles"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "requests\n| where timestamp >= ago(1h)\n| summarize RequestCount = count(), AvgDuration = avg(duration) by operation_Name\n| order by RequestCount desc\n| take 10",
+        "size": 0,
+        "title": "Breakdown by Operation Name (Top 10)",
+        "timeContext": {
+          "durationMs": 3600000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table"
+      },
+      "name": "query - Operation Breakdown"
+    }
+  ],
+  "styleSettings": {},
+  "fromTemplateId": "sentinel-UserWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
