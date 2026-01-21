@@ -38,4 +38,4 @@ jobs:
         with:
           app-name: ${{ env.APP_SERVICE_NAME }}
           images: ${{ env.REGISTRY_LOGIN_SERVER }}/zavastorefront:${{ github.sha }}
-          resource-group-name: ${{ env.RESOURCE_GROUP }}# Minimal GitHub Actions Workflow for .NET App Deployment
+          resource-group-name: ${{ env.RESOURCE_GROUP }}
