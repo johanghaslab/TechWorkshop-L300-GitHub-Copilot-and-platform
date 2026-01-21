@@ -34,7 +34,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t $REGISTRY_LOGIN_SERVER/zavastorefront:${{ github.sha }} .
+          docker build -t $REGISTRY_LOGIN_SERVER/zavastorefront:${{ github.sha }} ./src
           docker push $REGISTRY_LOGIN_SERVER/zavastorefront:${{ github.sha }}
 
       - name: Deploy to Azure Web App
