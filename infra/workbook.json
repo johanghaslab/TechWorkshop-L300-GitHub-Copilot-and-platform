@@ -1,0 +1,55 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "## AI Services Observability\nThis workbook will visualize Azure AI Services operational data using platform diagnostics from the AzureDiagnostics table.\n\nIt will include:\n- Request volume over time\n- Latency percentiles (p50/p95/p99)\n- Breakdown by operation name"
+      },
+      "name": "text-intro"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "// Request volume query placeholder",
+        "size": 1,
+        "title": "Request Volume Over Time",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "timechart"
+      },
+      "name": "request-volume"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "// Latency percentiles query placeholder",
+        "size": 1,
+        "title": "Latency Percentiles (p50 / p95 / p99)",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "timechart"
+      },
+      "name": "latency-percentiles"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "// Operation name breakdown query placeholder",
+        "size": 1,
+        "title": "Requests by Operation Name Over Time",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "timechart"
+      },
+      "name": "operation-breakdown"
+    }
+  ],
+  "fallbackResourceIds": [
+    "azureResourceId"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
