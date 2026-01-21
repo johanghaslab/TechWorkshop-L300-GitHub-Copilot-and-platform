@@ -12,8 +12,8 @@ resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: 'asp-${app}-${env}'
   location: location
   sku: {
-    name: 'B1'
-    tier: 'Basic'
+    name: 'P0V3'
+    tier: 'PremiumV3'
   }
   kind: 'linux'
   properties: {
