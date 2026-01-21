@@ -97,9 +97,13 @@ module foundry 'modules/foundry.bicep' = {
   }
 }
 
+resource acrResource 'Microsoft.ContainerRegistry/registries@2023-01-01-preview' existing = {
+  name: acrName
+}
+
 resource acrPullAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(appService.outputs.webAppPrincipalId, acr.outputs.acrId, 'acrpull')
-  scope: resourceId('Microsoft.ContainerRegistry/registries', acrName)
+  scope: acrResource
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
     principalId: appService.outputs.webAppPrincipalId
