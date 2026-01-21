@@ -8,11 +8,11 @@ param acrSku string = 'Basic'
 
 var nameSuffix = uniqueString(resourceGroup().id)
 var acrName = '${resourcePrefix}acr${nameSuffix}'
-var logAnalyticsName = '${resourcePrefix}-law-${nameSuffix}'
-var appInsightsName = '${resourcePrefix}-appi-${nameSuffix}'
-var appServicePlanName = '${resourcePrefix}-asp-${nameSuffix}'
-var webAppName = '${resourcePrefix}-app-${nameSuffix}'
-var foundryName = '${resourcePrefix}-foundry-${nameSuffix}'
+var logAnalyticsName = '${resourcePrefix}-${environmentName}-law-${nameSuffix}'
+var appInsightsName = '${resourcePrefix}-${environmentName}-appi-${nameSuffix}'
+var appServicePlanName = '${resourcePrefix}-${environmentName}-asp-${nameSuffix}'
+var webAppName = '${resourcePrefix}-${environmentName}-app-${nameSuffix}'
+var foundryName = '${resourcePrefix}-${environmentName}-foundry-${nameSuffix}'
 var acrImage = 'zavastorefront:latest'
 
 module acr './modules/acr.bicep' = {

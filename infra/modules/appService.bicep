@@ -15,7 +15,9 @@ var skuTier = contains(skuNormalized, 'v3')
       ? 'Premium'
       : startsWith(skuNormalized, 's')
         ? 'Standard'
-        : 'Basic'
+        : startsWith(skuNormalized, 'f')
+          ? 'Free'
+          : 'Basic'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName
