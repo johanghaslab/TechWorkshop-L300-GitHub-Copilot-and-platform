@@ -1,0 +1,12 @@
+name: zavastorefront
+infra:
+  provider: bicep
+  path: infra
+services:
+  web:
+    project: src
+    language: dotnet
+    host: appservice
+    docker:
+      path: ./Dockerfile
+      remoteBuild: true
