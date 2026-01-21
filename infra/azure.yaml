@@ -1,0 +1,14 @@
+name: zavasf
+metadata:
+  template: azd-init
+services:
+  web:
+    project: ../src
+    language: dotnet
+    host: appservice
+    docker:
+      path: ../src/Dockerfile
+      context: ../src
+infra:
+  provider: bicep
+  path: .
