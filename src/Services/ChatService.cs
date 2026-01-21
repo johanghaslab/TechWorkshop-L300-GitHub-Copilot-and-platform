@@ -1,6 +1,5 @@
 using System.Text;
 using System.Text.Json;
-using ZavaStorefront.Models;
 
 namespace ZavaStorefront.Services;
 
@@ -38,12 +37,17 @@ public class ChatService
             var jsonContent = JsonSerializer.Serialize(requestBody);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
+            var request = new HttpRequestMessage(HttpMethod.Post, _endpointUrl)
+            {
+                Content = content
+            };
+
             if (!string.IsNullOrEmpty(_apiKey) && _apiKey != "your-api-key-here")
             {
-                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
+                request.Headers.Add("Authorization", $"Bearer {_apiKey}");
             }
 
-            var response = await _httpClient.PostAsync(_endpointUrl, content);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {
