@@ -93,4 +93,5 @@ public class ChatService
             return $"Error: {ex.Message}";
         }
     }
+
 }
