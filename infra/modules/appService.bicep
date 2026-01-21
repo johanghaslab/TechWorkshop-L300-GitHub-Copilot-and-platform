@@ -6,13 +6,15 @@ param acrLoginServer string
 param containerImage string
 param appInsightsConnectionString string
 
+var skuTier = startsWith(toLower(sku), 'b') ? 'Basic' : 'Standard'
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName
   location: location
   kind: 'linux'
   sku: {
     name: sku
-    tier: 'Basic'
+    tier: skuTier
   }
   properties: {
     reserved: true
