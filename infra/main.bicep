@@ -37,13 +37,13 @@ param phiDeploymentName string = 'phi'
 @description('GPT-4 model name')
 param gptModelName string = 'gpt-4'
 
-@description('GPT-4 model version')
+@description('GPT-4 model version (update if swedencentral requires a different version)')
 param gptModelVersion string = '0613'
 
 @description('Phi model name')
 param phiModelName string = 'phi-4'
 
-@description('Phi model version')
+@description('Phi model version (update if swedencentral requires a different version)')
 param phiModelVersion string = '2024-10-01'
 
 module acr 'modules/acr.bicep' = {
@@ -101,8 +101,12 @@ resource acrResource 'Microsoft.ContainerRegistry/registries@2023-01-01-preview'
   name: acrName
 }
 
+resource foundryResource 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = {
+  name: foundryAccountName
+}
+
 resource acrPullAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(appService.outputs.webAppPrincipalId, acr.outputs.acrId, 'acrpull')
+  name: guid(resourceGroup().id, webAppName, acrName, 'acrpull')
   scope: acrResource
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
@@ -112,8 +116,8 @@ resource acrPullAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' 
 }
 
 resource foundryAccessAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(appService.outputs.webAppPrincipalId, foundry.outputs.foundryAccountId, 'foundryuser')
-  scope: foundry.outputs.foundryAccountId
+  name: guid(resourceGroup().id, webAppName, foundryAccountName, 'foundryuser')
+  scope: foundryResource
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')
     principalId: appService.outputs.webAppPrincipalId
