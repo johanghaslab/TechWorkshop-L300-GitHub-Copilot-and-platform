@@ -1,6 +1,12 @@
 using ZavaStorefront.Services;
 
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(int.Parse(port));
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
