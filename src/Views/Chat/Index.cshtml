@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<h2>Chat with Phi4</h2>
+<div>
+    <textarea id="chatArea" rows="10" cols="80" readonly style="width:100%;"></textarea>
+</div>
+<div style="margin-top:10px;">
+    <input type="text" id="userMessage" style="width:80%;" placeholder="Type your message..." />
+    <button id="sendBtn">Send</button>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('sendBtn').onclick = async function() {
+            const userMessage = document.getElementById('userMessage').value;
+            if (!userMessage) return;
+            const chatArea = document.getElementById('chatArea');
+            chatArea.value += '\nYou: ' + userMessage;
+            document.getElementById('userMessage').value = '';
+            const response = await fetch('/Chat/SendMessage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage })
+            });
+            const data = await response.json();
+            chatArea.value += '\nPhi4: ' + data.response;
+            chatArea.scrollTop = chatArea.scrollHeight;
+        };
+    </script>
+}

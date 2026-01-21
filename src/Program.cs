@@ -9,7 +9,9 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 // Add services to the container.
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 
 // Add session support
 builder.Services.AddDistributedMemoryCache();
@@ -43,6 +45,12 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthorization();
+
+
+app.MapControllerRoute(
+    name: "chat",
+    pattern: "Chat/{action=Index}/{id?}",
+    defaults: new { controller = "Chat" });
 
 app.MapControllerRoute(
     name: "default",
